@@ -12,17 +12,20 @@ export async function getCabins() {
 }
 
 export async function createEditCabin(newCabin, id) {
+  console.log(newCabin,id)
 
-  // console.log(newCabin,id)
-
-  const hasImagePath=newCabin.image?.startsWith?.(supabaseUrl)
+  const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
 
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
     "/",
     ""
   );
 
-  const imagePath = hasImagePath? newCabin.image:`${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+  // console.log(imageName)
+
+  const imagePath = hasImagePath
+    ? newCabin.image
+    : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
   // console.log(imagePath)
 
   //https://zhdlwpftokkcqdgkvcjb.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg
@@ -32,11 +35,11 @@ export async function createEditCabin(newCabin, id) {
   let query = supabase.from("cabins");
 
   //A) CREATE
-  if (!id) query= query.insert([{ ...newCabin, image: imagePath }]);
+  if (!id) query = query.insert([{ ...newCabin, image: imagePath }]);
 
   //B) EDIT
 
-  if (id) query = query.update({...newCabin, image: imagePath  }).eq("id", id);
+  if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
 
   const { data, error } = await query.select().single();
 
@@ -44,10 +47,11 @@ export async function createEditCabin(newCabin, id) {
     console.log(error);
     throw new Error("Cabins could not be created");
   }
-  
+
   //2. Upload the image
 
-  if(hasImagePath) return data
+  if (hasImagePath) return data;
+
   const { error: storageError } = await supabase.storage
     .from("cabin-images")
     .upload(imageName, newCabin.image);
@@ -55,7 +59,7 @@ export async function createEditCabin(newCabin, id) {
   //3. Delete the cabin if there was an error uploading image
   if (storageError) {
     await supabase.from("cabins").delete().eq("id", data.id);
-    console.log(error);
+    console.log(storageError);
     throw new Error(
       "Cabins image could not be uploaded and the cabin was not created"
     );
