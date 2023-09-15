@@ -83,7 +83,7 @@ function Menus({ children }) {
 }
 
 function Toggle({ id }) {
-  const { openId, close, open, position, setPosition } =
+  const { openId, close, open, setPosition } =
     useContext(MenuContext);
 
   function handleClick(e) {
