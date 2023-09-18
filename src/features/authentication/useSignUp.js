@@ -12,5 +12,5 @@ export function useSignUp() {
     },
   });
 
-  return {signup, isLoading}
+  return { signup, isLoading };
 }

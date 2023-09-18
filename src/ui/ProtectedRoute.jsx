@@ -18,20 +18,23 @@ function ProtectedRoute({ children }) {
   const { isAuthenticated, isLoading } = useUser();
 
   //2. Tf there is NO authenticated user, redirect to the /login
-  useEffect(function () {
+  useEffect(
+    function () {
       if (!isAuthenticated && !isLoading) navigate("/login");
-    }, [isAuthenticated,isLoading,navigate]);
-    
-    //3. While loading, show a spinner
-    if (isLoading)
-      return (
-        <FullPage>
-          <Spinner />
-        </FullPage>
-      );
+    },
+    [isAuthenticated, isLoading, navigate]
+  );
+
+  //3. While loading, show a spinner
+  if (isLoading)
+    return (
+      <FullPage>
+        <Spinner />
+      </FullPage>
+    );
 
   //4. Tf there Is a user, render the app
-  if(isAuthenticated) return children;
+  if (isAuthenticated) return children;
 }
 
 export default ProtectedRoute;

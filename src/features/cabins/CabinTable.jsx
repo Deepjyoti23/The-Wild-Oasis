@@ -12,7 +12,7 @@ function CabinTable() {
   // console.log(cabins);
 
   if (isLoading) return <Spinner />;
-  if (!cabins.length) return <Empty resoureName="cabins" />;
+  if (!cabins.length) return <Empty resourceName="cabins" />;
 
   //1. FILTER
   const filterValue = searchParams.get("discount") || "all";

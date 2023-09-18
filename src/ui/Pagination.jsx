@@ -59,29 +59,27 @@ const PaginationButton = styled.button`
   }
 `;
 
-
-
 function Pagination({ count }) {
-  const [searchaPrams, setSearchParams] = useSearchParams();
-  const currentPage = !searchaPrams.get("page")
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = !searchParams.get("page")
     ? 1
-    : Number(searchaPrams.get("page"));
+    : Number(searchParams.get("page"));
   const pageCount = Math.ceil(count / PAGE_SIZE);
 
   function nextPage() {
     const next = currentPage === pageCount ? currentPage : currentPage + 1;
-    searchaPrams.set("page", next);
-    setSearchParams(searchaPrams);
+    searchParams.set("page", next);
+    setSearchParams(searchParams);
   }
 
   function prevPage() {
     const prev = currentPage === 1 ? currentPage : currentPage - 1;
 
-    searchaPrams.set("page", prev);
-    setSearchParams(searchaPrams);
+    searchParams.set("page", prev);
+    setSearchParams(searchParams);
   }
 
-  if(pageCount<=1) return null;
+  if (pageCount <= 1) return null;
 
   return (
     <StyledPagination>

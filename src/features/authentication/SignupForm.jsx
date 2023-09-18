@@ -8,15 +8,15 @@ import { useSignUp } from "./useSignUp";
 // Email regex: /\S+@\S+\.\S+/
 
 function SignupForm() {
+  const { signup, isLoading } = useSignUp();
   const { register, formState, getValues, handleSubmit, reset } = useForm();
   const { errors } = formState;
-  const { signup, isLoading } = useSignUp();
 
   function onSubmit({ fullName, email, password }) {
     signup(
       { fullName, email, password },
       {
-        onSettled: reset,
+        onSettled: () => reset(),
       }
     );
   }
@@ -58,7 +58,7 @@ function SignupForm() {
             required: "This field is required",
             minLength: {
               value: 8,
-              message: "Password needs a minimum of 8 character",
+              message: "Password needs a minimum of 8 characters",
             },
           })}
         />
@@ -72,14 +72,19 @@ function SignupForm() {
           {...register("passwordConfirm", {
             required: "This field is required",
             validate: (value) =>
-              value === getValues().password || "Password needs to match",
+              value === getValues().password || "Passwords need to match",
           })}
         />
       </FormRow>
 
       <FormRow>
         {/* type is an HTML attribute! */}
-        <Button  onClick={reset} $variation="secondary" type="reset" disabled={isLoading}>
+        <Button
+          onClick={reset}
+          $variation="secondary"
+          type="reset"
+          disabled={isLoading}
+        >
           Cancel
         </Button>
         <Button disabled={isLoading}>Create new user</Button>
