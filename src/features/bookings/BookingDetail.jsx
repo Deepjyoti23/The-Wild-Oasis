@@ -18,6 +18,7 @@ import { useDeleteBooking } from "./useDeleteBooking";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Empty from "../../ui/Empty";
+import { useState } from "react";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ function BookingDetail() {
   const navigate = useNavigate();
   const { checkout, isCheckingOut } = useCheckout();
   const { isDeleting, deleteBooking } = useDeleteBooking();
+  const [isHovered, setIsHovered] = useState(false);
   // const status = "checked-in";
 
   const moveBack = useMoveBack();
@@ -74,7 +76,14 @@ function BookingDetail() {
         )}
         <Modal>
           <Modal.Open opens="delete">
-            <Button $variation="danger">Delete booking</Button>
+            <Button
+              $variation="danger"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+              disabled={isHovered}
+            >
+              Delete booking
+            </Button>
           </Modal.Open>
           <Modal.Window name="delete">
             <ConfirmDelete
